@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 给你的情书 💌</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f9e5e5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 20px;
+        }
+        
+        .envelope-container {
+            max-width: 700px;
+            width: 100%;
+        }
+        
+        /* 信封样式 */
+        .envelope {
+            background: #fef3e4;
+            border-radius: 15px 15px 15px 15px;
+            box-shadow: 0 25px 45px -15px rgba(150, 80, 80, 0.4);
+            position: relative;
+            padding: 30px 30px 50px;
+            border: 1px solid #fad5b3;
+            transition: all 0.5s;
+        }
+        
+        .envelope:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(135deg, #fad5b3 50%, transparent 50%);
+            background-size: 20px 20px;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .envelope-seal {
+            position: absolute;
+            top: 35px;
+            right: 40px;
+            font-size: 32px;
+            transform: rotate(15deg);
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+            animation: sealGlow 2s infinite;
+        }
+        
+        @keyframes sealGlow {
+            0%, 100% { opacity: 0.8; transform: rotate(15deg) scale(1); }
+            50% { opacity: 1; transform: rotate(15deg) scale(1.1); }
+        }
+        
+        .stamp {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: #ffd0b0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            border: 3px dashed #d9986a;
+            color: #b55a3a;
+            transform: rotate(-10deg);
+        }
+        
+        .to-address {
+            font-size: 20px;
+            color: #a66b56;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px dotted #f0c0a0;
+            font-style: italic;
+            letter-spacing: 2px;
+        }
+        
+        .password-area {
+            text-align: center;
+            padding: 20px 20px 30px;
+            background: rgba(255, 235, 215, 0.5);
+            border-radius: 100px 100px 30px 30px;
+            margin: 25px 0;
+        }
+        
+        .password-area h3 {
+            font-size: 26px;
+            color: #ac5e4a;
+            font-weight: normal;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+        
+        .password-input-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .password-input-wrapper input {
+            padding: 18px 25px;
+            font-size: 20px;
+            border: 2px solid #f7c9ae;
+            background: white;
+            border-radius: 50px;
+            width: 250px;
+            outline: none;
+            font-family: 'Georgia', serif;
+            text-align: center;
+            letter-spacing: 5px;
+            color: #b55a3a;
+            box-shadow: 0 5px 15px rgba(230, 150, 120, 0.2);
+        }
+        
+        .password-input-wrapper input:focus {
+            border-color: #e6977c;
+            box-shadow: 0 8px 20px rgba(220, 120, 90, 0.3);
+        }
+        
+        .password-input-wrapper button {
+            padding: 18px 40px;
+            background: #e6977c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(200, 100, 70, 0.4);
+        }
+        
+        .password-input-wrapper button:hover {
+            background: #d17a5e;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(190, 90, 60, 0.5);
+        }
+        
+        .hint {
+            color: #b58b7a;
+            font-size: 16px;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        
+        /* 信件内容样式 */
+        .letter-content {
+            display: none;
+            background: #fffcf5;
+            border-radius: 15px;
+            padding: 40px 35px;
+            box-shadow: inset 0 0 30px #fae2ce, 0 15px 30px rgba(150, 80, 50, 0.2);
+            position: relative;
+            margin-top: 20px;
+            border: 1px solid #fadbc0;
+            animation: letterOpen 1.2s ease;
+        }
+        
+        @keyframes letterOpen {
+            0% { opacity: 0; transform: scale(0.9) rotate(-2deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+        
+        .letter-content:before {
+            content: '❤️';
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 25px;
+            opacity: 0.2;
+        }
+        
+        .letter-content:after {
+            content: '❤️';
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 35px;
+            opacity: 0.15;
+        }
+        
+        .date {
+            text-align: right;
+            color: #b28168;
+            margin-bottom: 30px;
+            font-style: italic;
+            font-size: 18px;
+            border-bottom: 1px dashed #dbb69c;
+            padding-bottom: 10px;
+        }
+        
+        .greeting {
+            font-size: 28px;
+            color: #a45d48;
+            margin-bottom: 25px;
+            font-weight: normal;
+            text-align: center;
+        }
+        
+        .letter-text {
+            font-size: 20px;
+            line-height: 1.9;
+            color: #5d3f34;
+            margin-bottom: 40px;
+            white-space: pre-wrap;
+            text-align: justify;
+            padding: 0 10px;
+        }
+        
+        .signature-area {
+            text-align: right;
+            margin-top: 30px;
+            border-top: 2px solid #f0cfb5;
+            padding-top: 25px;
+        }
+        
+        .signature-name {
+            font-size: 28px;
+            color: #ac5e4a;
+            font-family: 'Brush Script MT', cursive;
+            margin-bottom: 5px;
+        }
+        
+        .error-msg {
+            color: #c06a5a;
+            min-height: 30px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .floating-flowers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .flower {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.15;
+            animation: flowerFloat 15s linear infinite;
+        }
+        
+        @keyframes flowerFloat {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-20vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-flowers" id="flowersContainer"></div>
+    
+    <div class="envelope-container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-seal">💮</div>
+            <div class="stamp">💌</div>
+            
+            <div id="lockSection">
+                <div class="to-address">✨ To: 我最爱的宝贝 ✨</div>
+                
+                <div class="password-area">
+                    <h3>🔐 这封情书需要密码才能打开</h3>
+                    <p style="color: #b88d78; margin-bottom: 15px;">输入我们特别的日期吧</p>
+                    
+                    <div class="password-input-wrapper">
+                        <input type="password" id="secretCode" placeholder="* * * * * *" maxlength="6">
+                        <button onclick="unlockLetter()">开 启</button>
+                    </div>
+                    
+                    <div class="error-msg" id="errorMessage"></div>
+                    <div class="hint">💭 提示：是我们第一次牵手的日子吗？</div>
+                </div>
+            </div>
+            
+            <div class="letter-content" id="letterSection">
+                <div class="date">2024年 春日</div>
+                <div class="greeting">亲爱的 [妮妮/宝贝/老婆]：</div>
+                
+                <div class="letter-text">
+                    写下这些字的时候，脑海里全是你的笑容。<br><br>
+                    
+                    有人说，遇见爱情需要运气，<br>
+                    但我觉得，能和你在一起，是我攒了很久的运气。<br><br>
+                    
+                    喜欢你，像春天的熊在树干上蹭痒，<br>
+                    喜欢你，像夏天的西瓜最中间那一口，<br>
+                    喜欢你，像秋天的落叶刚好落在手心，<br>
+                    喜欢你，像冬天的被窝里突然钻进来一只猫。<br><br>
+                    
+                    其实喜欢就是喜欢，不需要那么多比喻。<br>
+                    就是想和你一起做无聊的事，说废话，<br>
+                    然后看着你的眼睛笑。<br><br>
+                    
+                    下次见面，让我抱抱你吧。<br>
+                    把没见面的日子，都补回来。<br>
+                </div>
+                
+                <div class="signature-area">
+                    <div class="signature-name">爱你的 [你的名字]</div>
+                    <div style="color: #ac7a68;">❤️ 永远永远 ❤️</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px; color: #cfa58d; font-size: 14px;">
+                ✉️ 寄件人：最爱你的我
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 生成漂浮的花朵
+        function createFlowers() {
+            const container = document.getElementById('flowersContainer');
+            const flowers = ['🌸', '🌼', '🌺', '🌷', '🌹', '💐', '🌻', '🌿'];
+            
+            for (let i = 0; i < 20; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+                flower.style.left = Math.random() * 100 + '%';
+                flower.style.animationDelay = Math.random() * 10 + 's';
+                flower.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                container.appendChild(flower);
+            }
+        }
+        
+        createFlowers();
+    
+        function unlockLetter() {
+            // 在这里设置密码
+            const correctCode = "520520";  // ← 修改成你们的纪念日或其他密码
+            
+            const input = document.getElementById('secretCode');
+            const errorDiv = document.getElementById('errorMessage');
+            const lockSection = document.getElementById('lockSection');
+            const letterSection = document.getElementById('letterSection');
+            
+            if (input.value === correctCode) {
+                lockSection.style.display = 'none';
+                letterSection.style.display = 'block';
+                
+                // 添加一些小星星效果
+                const envelope = document.getElementById('envelope');
+                envelope.style.transform = 'translateY(-5px)';
+                setTimeout(() => {
+                    envelope.style.transform = '';
+                }, 300);
+            } else {
+                errorDiv.innerHTML = '💔 密码不对哦，再想想我们重要的日子？';
+                input.value = '';
+                input.focus();
+                
+                // 抖动效果
+                const envelope = document.getElementById('envelope');
+                envelope.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    envelope.style.animation = '';
+                }, 500);
+            }
+        }
+        
+        // 回车键
+        document.getElementById('secretCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                unlockLetter();
+            }
+        });
+        
+        // 添加抖动动画
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                20%, 60% { transform: translateX(-8px); }
+                40%, 80% { transform: translateX(8px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
